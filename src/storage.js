@@ -1,12 +1,11 @@
-module.exports = (() => {
-    if(!global.scheduledTasks){
+import * as uuid from "uuid";
+export default (() => {
+    if (!global.scheduledTasks) {
         global.scheduledTasks = new Map();
     }
-    
     return {
         save: (task) => {
-            if(!task.options){
-                const uuid = require('uuid');
+            if (!task.options) {
                 task.options = {};
                 task.options.name = uuid.v4();
             }

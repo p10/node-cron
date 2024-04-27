@@ -1,36 +1,30 @@
+import monthNamesConversion from "./month-names-conversion.js";
+import weekDayNamesConversion from "./week-day-names-conversion.js";
+import convertAsterisksToRanges from "./asterisk-to-range-conversion.js";
+import convertRanges from "./range-conversion.js";
+import convertSteps from "./step-values-conversion.js";
 'use strict';
-
-const monthNamesConversion = require('./month-names-conversion');
-const weekDayNamesConversion = require('./week-day-names-conversion');
-const convertAsterisksToRanges = require('./asterisk-to-range-conversion');
-const convertRanges = require('./range-conversion');
-const convertSteps = require('./step-values-conversion');
-
-module.exports = (() => {
-
-    function appendSeccondExpression(expressions){
-        if(expressions.length === 5){
+export default (() => {
+    function appendSeccondExpression(expressions) {
+        if (expressions.length === 5) {
             return ['0'].concat(expressions);
         }
         return expressions;
     }
-
     function removeSpaces(str) {
         return str.replace(/\s{2,}/g, ' ').trim();
     }
-
     // Function that takes care of normalization.
     function normalizeIntegers(expressions) {
-        for (let i=0; i < expressions.length; i++){
+        for (let i = 0; i < expressions.length; i++) {
             const numbers = expressions[i].split(',');
-            for (let j=0; j<numbers.length; j++){
+            for (let j = 0; j < numbers.length; j++) {
                 numbers[j] = parseInt(numbers[j]);
             }
             expressions[i] = numbers;
         }
         return expressions;
     }
-
     /*
    * The node-cron core allows only numbers (including multiple numbers e.g 1,2).
    * This module is going to translate the month names, week day names and ranges
@@ -48,7 +42,7 @@ module.exports = (() => {
    *  - expression 1-5 * * * *
    *  - Will be translated to 1,2,3,4,5 * * * *
    */
-    function interprete(expression){
+    function interprete(expression) {
         let expressions = removeSpaces(expression).split(' ');
         expressions = appendSeccondExpression(expressions);
         expressions[4] = monthNamesConversion(expressions[4]);
@@ -56,11 +50,8 @@ module.exports = (() => {
         expressions = convertAsterisksToRanges(expressions);
         expressions = convertRanges(expressions);
         expressions = convertSteps(expressions);
-
         expressions = normalizeIntegers(expressions);
-
         return expressions.join(' ');
     }
-
     return interprete;
 })();
