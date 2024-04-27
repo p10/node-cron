@@ -2,7 +2,6 @@ import ScheduledTask from "./scheduled-task.js";
 import BackgroundScheduledTask from "./background-scheduled-task/index.js";
 import validation from "./pattern-validation.js";
 import storage from "./storage.js";
-'use strict';
 /**
  * @typedef {Object} CronScheduleOptions
  * @prop {boolean} [scheduled] if a scheduled task is ready and running to be
@@ -19,14 +18,14 @@ import storage from "./storage.js";
  * @returns {ScheduledTask} The scheduled task.
  */
 function schedule(expression, func, options) {
-    const task = createTask(expression, func, options);
-    storage.save(task);
-    return task;
+  const task = createTask(expression, func, options);
+  storage.save(task);
+  return task;
 }
 function createTask(expression, func, options) {
-    if (typeof func === 'string')
-        return new BackgroundScheduledTask(expression, func, options);
-    return new ScheduledTask(expression, func, options);
+  if (typeof func === "string")
+    return new BackgroundScheduledTask(expression, func, options);
+  return new ScheduledTask(expression, func, options);
 }
 /**
  * Check if a cron expression is valid.
@@ -35,13 +34,12 @@ function createTask(expression, func, options) {
  * @returns {boolean} Whether the expression is valid or not.
  */
 function validate(expression) {
-    try {
-        validation(expression);
-        return true;
-    }
-    catch (_) {
-        return false;
-    }
+  try {
+    validation(expression);
+    return true;
+  } catch (_) {
+    return false;
+  }
 }
 /**
  * Gets the scheduled tasks.
@@ -49,13 +47,13 @@ function validate(expression) {
  * @returns {ScheduledTask[]} The scheduled tasks.
  */
 function getTasks() {
-    return storage.getTasks();
+  return storage.getTasks();
 }
 export { schedule };
 export { validate };
 export { getTasks };
 export default {
-    schedule,
-    validate,
-    getTasks
+  schedule,
+  validate,
+  getTasks,
 };

@@ -1,3 +1,3 @@
-exports.task = () => {
+export const task = () => {
     return 'dummy task';
 };

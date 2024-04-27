@@ -1,30 +1,25 @@
-const { assert } = require('chai');
-const sinon = require('sinon');
-const Scheduler = require('../src/scheduler');
-
+import chai from "chai";
+import sinon from "sinon";
+import Scheduler from "../src/scheduler.js";
+const { assert } = chai;
 describe('Scheduler', () => {
     beforeEach(() => {
         this.clock = sinon.useFakeTimers();
     });
-
     afterEach(() => {
         this.clock.restore();
     });
-
     it('should emit an event on matched time', (done) => {
         let scheduler = new Scheduler('* * * * * *');
-
         scheduler.on('scheduled-time-matched', (date) => {
             assert.isNotNull(date);
             assert.instanceOf(date, Date);
             scheduler.stop();
             done();
         });
-
         scheduler.start();
         this.clock.tick(1000);
     });
-
     it('should emit an event every second', (done) => {
         let scheduler = new Scheduler('* * * * * *');
         let emited = 0;
@@ -32,7 +27,7 @@ describe('Scheduler', () => {
             emited += 1;
             assert.isNotNull(date);
             assert.instanceOf(date, Date);
-            if(emited === 5){
+            if (emited === 5) {
                 scheduler.stop();
                 done();
             }
@@ -40,7 +35,6 @@ describe('Scheduler', () => {
         scheduler.start();
         this.clock.tick(5000);
     });
-
     it('should recover missed executions', (done) => {
         this.clock.restore();
         let scheduler = new Scheduler('* * * * * *', null, true);
@@ -51,20 +45,17 @@ describe('Scheduler', () => {
         scheduler.start();
         let wait = true;
         let startedAt = new Date();
-        
-        while(wait){
-            if((new Date().getTime() - startedAt.getTime()) > 1000){
+        while (wait) {
+            if ((new Date().getTime() - startedAt.getTime()) > 1000) {
                 wait = false;
             }
         }
-
         setTimeout(() => {
             scheduler.stop();
             assert.equal(2, emited);
             done();
         }, 1000);
     }).timeout(3000);
-
     it('should ignore missed executions', (done) => {
         this.clock.restore();
         let scheduler = new Scheduler('* * * * * *', null, false);
@@ -75,13 +66,11 @@ describe('Scheduler', () => {
         scheduler.start();
         let wait = true;
         let startedAt = new Date();
-        
-        while(wait){
-            if((new Date().getTime() - startedAt.getTime()) > 1000){
+        while (wait) {
+            if ((new Date().getTime() - startedAt.getTime()) > 1000) {
                 wait = false;
             }
         }
-
         setTimeout(() => {
             scheduler.stop();
             assert.equal(1, emited);

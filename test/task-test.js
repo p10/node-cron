@@ -1,16 +1,14 @@
-const { assert } = require('chai');
-const sinon = require('sinon');
-const Task = require('../src/task');
-
+import chai from "chai";
+import sinon from "sinon";
+import Task from "../src/task.js";
+const { assert } = chai;
 describe('Task', () => {
     beforeEach(() => {
         this.clock = sinon.useFakeTimers(new Date(2018, 0, 1, 0, 0, 0, 0));
     });
-
     afterEach(() => {
         this.clock.restore();
     });
-
     it('should emit event on finish a task', async () => {
         let finished = false;
         let task = new Task(() => 'ok');
@@ -18,7 +16,6 @@ describe('Task', () => {
         await task.execute();
         assert.equal(true, finished);
     });
-
     it('should emit event on error a task', async () => {
         let error;
         let task = new Task(() => {
@@ -28,7 +25,6 @@ describe('Task', () => {
         await task.execute();
         assert.equal('execution error', error);
     });
-
     it('should emit event on finish a promise task', async () => {
         let finished = false;
         const promise = () => new Promise((resolve) => resolve('ok'));
@@ -37,7 +33,6 @@ describe('Task', () => {
         await task.execute();
         assert.equal(true, finished);
     });
-
     it('should emit event on error a promise task', async () => {
         let failed = false;
         const promise = () => new Promise((resolve, reject) => reject('errou'));

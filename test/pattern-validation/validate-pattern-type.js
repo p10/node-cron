@@ -1,19 +1,15 @@
-'use strict';
-
-const { expect } = require('chai');
-const Task = require('../../src/task');
-
-describe('Task', () => {
-    it('should accept a function', () => {
+import chai from "chai";
+import Task from "../../src/task.js";
+const { expect } = chai;
+describe("Task", () => {
+    it("should accept a function", () => {
         expect(() => {
-            new Task(() => {});
+            new Task(() => { });
         }).to.not.throw();
     });
-
-    it('should fail without a function', () => {
+    it("should fail without a function", () => {
         expect(() => {
             new Task([]);
-        }).to.throw('execution must be a function');
+        }).to.throw("execution must be a function");
     });
-
 });

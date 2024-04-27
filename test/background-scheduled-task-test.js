@@ -1,6 +1,6 @@
-const { assert } = require('chai');
-const BackgroundScheduledTask = require('../src/background-scheduled-task');
-
+import chai from "chai";
+import BackgroundScheduledTask from "../src/background-scheduled-task/index.js";
+const { assert } = chai;
 describe('BackgroundScheduledTask', () => {
     it('should start a task by default', (done) => {
         let task = new BackgroundScheduledTask('* * * * * *', './test/assets/dummy-task.js');
@@ -14,27 +14,21 @@ describe('BackgroundScheduledTask', () => {
         let task = new BackgroundScheduledTask('* * * * * *', './test/assets/dummy-task.js', {
             scheduled: false
         });
-
         assert.isUndefined(task.pid());
     });
-
     it('should start a task', (done) => {
         let task = new BackgroundScheduledTask('* * * * * *', './test/assets/dummy-task.js', {
             scheduled: false
         });
-
         assert.isUndefined(task.pid());
-
         task.on('task-done', (result) => {
             assert.equal('dummy task', result);
             task.stop();
             done();
         });
-
         task.start();
         assert.isNotNull(task.pid());
     });
-    
     it('should stop a task', () => {
         let task = new BackgroundScheduledTask('* * * * * *', './test/assets/dummy-task.js', {
             scheduled: true
